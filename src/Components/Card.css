@@ -1,0 +1,75 @@
+.Card {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    cursor: pointer;
+    background: white;
+    margin: 5px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    box-shadow: 0 1px 0 rgba(9, 45, 66, 0.25);
+    font-size: 15px;
+    overflow-wrap: break-word;
+    min-height: 18px;
+
+ 
+  }
+  
+  .Card:hover {
+    background: #f5f6f7;
+  }
+
+  .dropdown_container {
+    position: relative;
+  }
+  
+  .dropdown_btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 10px;
+    cursor: pointer;
+  }
+  
+  .dropdown_menu {
+    position: absolute;
+    float: right;
+    top: 50%;
+    left: 50%;
+    background-color: #f0f0f0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+  }
+  
+  .dropdown_menu li {
+    padding: 10px;
+    cursor: pointer;
+    width: 50px;
+  }
+  
+  .dropdown_menu li:hover {
+    background-color: #ddd;
+  }
+
+  .close_btn {
+    border-radius: 2px;
+  }
+
+  .menu_header {
+    display: flex;
+    justify-content: space-between;
+
+  }
+
+  /* .close_menu_btn {
+    margin: 0.8rem 0.8rem 0.8rem 0.8rem;
+  } */
+  
