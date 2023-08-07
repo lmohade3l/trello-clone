@@ -4,13 +4,12 @@ import './Card.css'
 
 
 
-function Card({card}) {
+function Card({card , onSort}) {
     const [show_btn , set_show_btn] = useState(false);
     const [is_open , set_is_open] = useState(false);
     const [tag , set_tag] = useState('white');
 
     
-
     function on_mouse_enter () {
         set_show_btn(true);
     }
@@ -26,6 +25,8 @@ function Card({card}) {
     function toggle_tag(value) {
         set_tag(value);
         set_is_open(false);
+        card = {...card , priority:value};
+        onSort(card);
     }
 
 

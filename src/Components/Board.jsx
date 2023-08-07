@@ -13,6 +13,10 @@ const data = {
         cards: [
           { id: 'card-1', content: 'Task 1' },
           { id: 'card-2', content: 'Task 2' },
+          { id: 'card-3', content: 'Task 3' },
+          { id: 'card-4', content: 'Task 4' },
+          { id: 'card-5', content: 'Task 5' },
+          { id: 'card-6', content: 'Task 6' },
         ],
       },
       {
@@ -37,9 +41,22 @@ const data = {
 
 
 function Board() {
+  
+    function add_priority(data) {
+      const lists = data.lists;
+      const new_lists=[];
+      lists.forEach(list => {
+        let updated_cards = list.cards.map((card) => { return {...card, priority: 'grey'};})
+        let updated_list = {...list, cards:updated_cards};
+        new_lists.push(updated_list);
+      });
+      return new_lists;
+    }
+
   return (
     <div className='Board'>
-      {data.lists.map((list) => (
+      {add_priority(data).map((list) => (
+        
         <List list={list} key={list.id}/>
       ))}
       <div className='add_list'>
