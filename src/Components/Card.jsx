@@ -4,7 +4,8 @@ import './Card.css'
 
 
 
-function Card({card , onSort}) {
+function Card({card , onSort , index , listIndex}) {
+    console.log(card.priority);
     const [show_btn , set_show_btn] = useState(false);
     const [is_open , set_is_open] = useState(false);
     const [tag , set_tag] = useState('white');
@@ -26,37 +27,46 @@ function Card({card , onSort}) {
         set_tag(value);
         set_is_open(false);
         card = {...card , priority:value};
-        onSort(card);
+        onSort(card , listIndex);
     }
 
 
     return (
-        <div className='Card' 
-             onMouseEnter={on_mouse_enter} 
-             onMouseLeave={on_mouse_leave}
-             style={{background:
-                `${tag==='white' ? 'white' : tag==='red' ? 'red' : 'blue'}`
-                }}>
-
-            {card.content}
-        {show_btn && 
-            <button className='dropdown_btn' onClick={toggle_dropdown_menu} >
-                edit
-            </button>}
-
-        {is_open && (
-            <ul className="dropdown_menu">
-                <div className='menu_header'>
-                    <p>Set a tag:</p>
-                    {/* <span><button className='close_menu_btn'>X</button></span> */}
-                </div>
-                <li value='red' onClick={() => toggle_tag('red')} key='high'>High</li>
-                <li value='white' onClick={() => toggle_tag('white')} key='normal'>Normal</li>
-                <li value='blue' onClick={() => toggle_tag('blue')} key='low'>Low</li>
-            </ul>
-      )}
-
-        </div>
+        <Draggable draggableId={card.id} index={index}>
+            {(provided) => (
+                <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} className='Card' 
+        
+                onMouseEnter={on_mouse_enter} 
+                onMouseLeave={on_mouse_leave}
+                style={{background:
+                    `${card.priority==='white' ? 'white' : 
+                    card.priority==='red' ? 'red' :
+                    card.priority==='blue' ? 'blue' : 'grey'}`
+                   }}>
+   
+               {card.content}
+           {show_btn && 
+               <button className='dropdown_btn' onClick={toggle_dropdown_menu} >
+                   edit
+               </button>}
+   
+           {is_open && (
+               <ul className="dropdown_menu">
+                   <div className='menu_header'>
+                       <p>Set a tag:</p>
+                       {/* <span><button className='close_menu_btn'>X</button></span> */}
+                   </div>
+                   <li value='red' onClick={() => toggle_tag('red')} key='high'>High</li>
+                   <li value='white' onClick={() => toggle_tag('white')} key='normal'>Normal</li>
+                   <li value='blue' onClick={() => toggle_tag('blue')} key='low'>Low</li>
+                   <li value='grey' onClick={() => toggle_tag('grey')} key='no=priority'>No Priority</li>
+               </ul>
+         )}
+   
+           </div>
+            )}
+        
+        </Draggable>
 
     )
 }

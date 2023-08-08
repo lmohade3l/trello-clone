@@ -8,8 +8,10 @@
 
   .Board {
     height: 100%;
+    width: fit-content;
     display: flex;
     overflow-x: auto;
+    border: solid black;
   }
 
   .add_list{
@@ -23,4 +25,8 @@
     margin-right: 0;
     border-radius: 10px;
     border: 1px solid rgba(0, 0, 0, 0.12);
+  }
+
+  .container{
+    display: flex;
   }

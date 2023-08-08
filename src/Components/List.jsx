@@ -1,49 +1,44 @@
-import React, { useEffect, useState } from 'react';
 import Card from './Card';
-import { Droppable } from 'react-beautiful-dnd';
+import { Draggable, Droppable } from 'react-beautiful-dnd';
 import './List.css';
 
-function List({list}) {
-    const [final_list , set_final_list] = useState(list);
-
-    function priority_sort(new_card) {
-        //update the list with the card's new priority:
-        const updated_cards = final_list.cards.map((card) => { return new_card.id===card.id ? new_card : card})
-        let updated_list = {...final_list, cards:updated_cards};
-        const sortingOrder = {
-            'red': 1,
-            'white': 2,
-            'blue': 3,
-            'grey': 4,
-          };
-          // Sort the 'cards' array based on the 'color' using the custom sorting order
-          const sortedCards = updated_list.cards.slice().sort((a, b) => {
-            return sortingOrder[a.priority] - sortingOrder[b.priority];
-          });
-
-          updated_list = {...list, cards:sortedCards};
-          set_final_list(updated_list);
-    }
-
+function List({list , index, onSort }) {
+    console.log('from list',list)
 
     return (
-        <div className='List'>
-            <div className='List-Title'>
-                <span className='title'>{final_list.title}</span>
-                <span className='menu'>...</span>
-            </div>
+        <Droppable droppableId={list.id} type='card_move'>
+            {(provided) => (
+            <div className='List' {...provided.droppableProps} ref={provided.innerRef}>
+                <div className='List-Title'>
+                    <span className='title'>{list.title}</span>
+                    <span className='menu'>...</span>
+                </div>
 
-            <ul>
-                {final_list.cards.map((card) => (
-                    <li className='card_list' key={card.id}>
-                        <Card card={card} onSort={priority_sort}/>
-                    </li>
-                ))}
-                <li className='add_card' key='231'>
-                    Add Card
-                </li>
-            </ul>
-        </div>
+                <div>
+                    <ul>
+                    {list.cards.map((card , cardIndex) => (
+                        <Draggable draggableId={card.id} index={cardIndex} key={card.id}>
+                            {(provided) => (
+                            <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}>
+                                <li className='card_list' key={card.id}>
+                                        <Card card={card} id={card.id} index={cardIndex} listIndex={index} onSort={onSort}/>
+                                </li>
+                             </div>
+                            )}
+                        </Draggable>
+                    ))}
+                        {provided.placeholder}
+                        <li className='add_card' key='231'>
+                            Add Card
+                        </li>
+                    </ul>
+                </div>
+                
+            </div>
+            )}
+            
+        </Droppable>
+   
     )
 }
 

@@ -1,68 +1,163 @@
-import React from 'react';
+import React, { useState } from 'react';
 import List from './List';
 import './Board.css';
-// import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
 
-const data = {
-  lists :
-    [
-      {
-        id: 'list-1',
-        title: 'To Do',
-        cards: [
-          { id: 'card-1', content: 'Task 1' },
-          { id: 'card-2', content: 'Task 2' },
-          { id: 'card-3', content: 'Task 3' },
-          { id: 'card-4', content: 'Task 4' },
-          { id: 'card-5', content: 'Task 5' },
-          { id: 'card-6', content: 'Task 6' },
-        ],
-      },
-      {
-        id: 'list-2',
-        title: 'Doing',
-        cards: [
-          { id: 'card-3', content: 'Task 3' },
-          { id: 'card-4', content: 'Task 4' },
-        ],
-      },
-      {
-        id: 'list-3',
-        title: 'Done',
-        cards: [
-          { id: 'card-5', content: 'Task 5' },
-          { id: 'card-6', content: 'Task 6' },
-        ],
-      },
-    ]
-}
+
+const data = [
+    {
+      id: 'list-1',
+      title: 'To Do',
+      cards: [
+        { id: 'card-11', content: 'Task 1' , priority:'grey'},
+        { id: 'card-12', content: 'Task 2' , priority:'grey'},
+        { id: 'card-13', content: 'Task 3' , priority:'grey'},
+        { id: 'card-14', content: 'Task 4' , priority:'grey'},
+        { id: 'card-15', content: 'Task 5' , priority:'grey'},
+        { id: 'card-16', content: 'Task 6' , priority:'grey'},
+      ],
+    },
+    {
+      id: 'list-2',
+      title: 'Doing',
+      cards: [
+        { id: 'card-23', content: 'Task 3', priority:'grey' },
+        { id: 'card-24', content: 'Task 4' , priority:'grey'},
+      ],
+    },
+    {
+      id: 'list-3',
+      title: 'Done',
+      cards: [
+        { id: 'card-35', content: 'Task 5' , priority:'grey'},
+        { id: 'card-36', content: 'Task 6' , priority:'grey'},
+      ],
+    },
+]
+
   
-
 
 function Board() {
+  const [lists , set_lists] = useState(data);
   
-    function add_priority(data) {
-      const lists = data.lists;
-      const new_lists=[];
-      lists.forEach(list => {
-        let updated_cards = list.cards.map((card) => { return {...card, priority: 'grey'};})
-        let updated_list = {...list, cards:updated_cards};
-        new_lists.push(updated_list);
+  function priority_sort(new_card , listIndex) {
+    //update the list with the card's new priority:
+
+    const updated_cards = lists[listIndex].cards.map((card) => { return new_card.id===card.id ? new_card : card})
+    let updated_list = {...lists[listIndex], cards:updated_cards};
+    const sortingOrder = {
+        'red': 1,
+        'white': 2,
+        'blue': 3,
+        'grey': 4,
+      };
+      // Sort the 'cards' array based on the 'color' using the custom sorting order
+      const sortedCards = updated_list.cards.slice().sort((a, b) => {
+
+        return sortingOrder[a.priority] - sortingOrder[b.priority];
       });
-      return new_lists;
+
+      updated_list = {...lists[listIndex], cards:sortedCards};
+      const sorted_lists = [...lists];
+      sorted_lists[listIndex] = updated_list;
+      set_lists(sorted_lists);
+  }
+
+
+  function list_sort(lists , listIndex) {
+    let list = {...lists[listIndex]};
+
+    const sortingOrder = {
+        'red': 1,
+        'white': 2,
+        'blue': 3,
+        'grey': 4,
+      };
+      // Sort the 'cards' array based on the 'color' using the custom sorting order
+      const sortedCards = list.cards.slice().sort((a, b) => {
+ 
+        return sortingOrder[a.priority] - sortingOrder[b.priority];
+      });
+
+      list = {...lists[listIndex], cards:sortedCards};
+      const sorted_lists = [...lists];
+      sorted_lists[listIndex] = list;
+
+      set_lists(sorted_lists);
+  }
+
+
+  function handle_drag(results) {
+    const {source , destination , type} = results;
+    console.log(results);
+    //in-case of dropping in the wrong place:
+    if(!destination) return;
+    //in-case of dropping in the source:
+    if(source.droppableId===destination.droppableId && source.index===destination.index) return;
+
+    //drag and drop lists in the board:
+    if(type==='list_move') {
+      const reordered_lists = [...lists]
+      
+      const [moved_list] = reordered_lists.splice(source.index , 1);
+      reordered_lists.splice(destination.index , 0 , moved_list);
+
+      return set_lists(reordered_lists);
     }
 
+    //drag and drop cards in the lists:
+    const list_source_index = lists.findIndex(list => list.id===source.droppableId);  //which list did u drag the card from?
+    const list_dest_index = lists.findIndex(list => list.id===destination.droppableId);  //which list did u drop the card into?
+
+    
+    const new_source_cards = [...lists[list_source_index].cards];
+    const new_dest_cards = source.droppableId!==destination.droppableId ? [...lists[list_dest_index].cards] : new_source_cards;
+
+    
+    const moved_card = new_source_cards.splice(source.index , 1);
+    new_dest_cards.splice(destination.index , 0 , ...moved_card);
+
+    const new_lists = [...lists];
+    new_lists[list_source_index] = {...lists[list_source_index] , cards:new_source_cards};
+    new_lists[list_dest_index] = {...lists[list_dest_index] , cards:new_dest_cards};
+
+
+    set_lists(new_lists);
+    // list_sort(list_source_index);
+    list_sort(new_lists , list_dest_index);
+    
+  }
+
+  console.log('list to be out' , lists);
   return (
-    <div className='Board'>
-      {add_priority(data).map((list) => (
+    <DragDropContext onDragEnd={handle_drag}>
+      <Droppable droppableId='board' type='list_move'>
+
+        {(provided) => (
+          <div className='container'>
+            <div {...provided.droppableProps} ref={provided.innerRef} className='Board'>
+              {lists.map((list , listIndex) => (
+                  
+              <Draggable draggableId={list.id} index={listIndex} key={list.id}>
+                {(provided) => (
+                  <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}>
+                    <List list={list} key={list.id} index={listIndex} onSort={priority_sort}/>
+                  </div>
+                )}
+              </Draggable>
+
+              ))}
+            {provided.placeholder}
+            </div>
+            <div className='add_list'>
+                Add List
+            </div>
+          </div> 
+        )}
         
-        <List list={list} key={list.id}/>
-      ))}
-      <div className='add_list'>
-        Add List
-      </div>
-    </div>
+      </Droppable>
+    </DragDropContext>
   )
 }
 
