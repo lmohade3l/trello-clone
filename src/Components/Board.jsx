@@ -14,8 +14,7 @@ const data = [
         { id: 'card-12', content: 'Task 2' , priority:'grey'},
         { id: 'card-13', content: 'Task 3' , priority:'grey'},
         { id: 'card-14', content: 'Task 4' , priority:'grey'},
-        { id: 'card-15', content: 'Task 5' , priority:'grey'},
-        { id: 'card-16', content: 'Task 6' , priority:'grey'},
+
       ],
     },
     {
@@ -149,10 +148,11 @@ function Board() {
 
               ))}
             {provided.placeholder}
-            </div>
             <div className='add_list'>
                 Add List
             </div>
+            </div>
+            
           </div> 
         )}
         
