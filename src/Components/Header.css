@@ -1,5 +1,8 @@
 .header {
-    padding: 30px;
+    padding : 20px;
     text-align: center;
+
+    /* background-color: rgb(152, 200, 216); */
+    background-color: #d0bdf4;
     
 }

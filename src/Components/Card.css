@@ -3,7 +3,7 @@
     justify-content: space-between;
     position: relative;
     cursor: pointer;
-    background: white;
+    background: rgb(223, 216, 216);
     margin: 5px;
     padding: 10px;
     border-radius: 5px;
@@ -11,9 +11,9 @@
     box-shadow: 0 1px 0 rgba(9, 45, 66, 0.25);
     font-size: 15px;
     overflow-wrap: break-word;
-    min-height: 18px;
+    height: 18px;
+    align-items: center;
 
- 
   }
   
   .Card:hover {
@@ -25,11 +25,9 @@
   }
   
   .dropdown_btn {
-    background-color: #007bff;
-    color: #fff;
     border: none;
     border-radius: 4px;
-    padding: 10px 10px;
+    /* padding: 3px 3px; */
     cursor: pointer;
   }
   
@@ -42,6 +40,7 @@
     list-style: none;
     padding: 0;
     margin: 0;
+   
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     display: flex;
@@ -50,9 +49,9 @@
   }
   
   .dropdown_menu li {
-    padding: 10px;
+    padding: 5px;
     cursor: pointer;
-    width: 50px;
+    width: 80px;
   }
   
   .dropdown_menu li:hover {
@@ -64,8 +63,8 @@
   }
 
   .menu_header {
-    display: flex;
-    justify-content: space-between;
+
+    padding: 1px;
 
   }
 

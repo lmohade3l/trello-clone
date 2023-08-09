@@ -5,10 +5,9 @@ import './Card.css'
 
 
 function Card({card , onSort , index , listIndex}) {
-    console.log(card.priority);
     const [show_btn , set_show_btn] = useState(false);
     const [is_open , set_is_open] = useState(false);
-    const [tag , set_tag] = useState('white');
+    // const [tag , set_tag] = useState('white');
 
     
     function on_mouse_enter () {
@@ -24,7 +23,7 @@ function Card({card , onSort , index , listIndex}) {
     }
 
     function toggle_tag(value) {
-        set_tag(value);
+        // set_tag(value);
         set_is_open(false);
         card = {...card , priority:value};
         onSort(card , listIndex);
@@ -39,15 +38,15 @@ function Card({card , onSort , index , listIndex}) {
                 onMouseEnter={on_mouse_enter} 
                 onMouseLeave={on_mouse_leave}
                 style={{background:
-                    `${card.priority==='white' ? 'white' : 
-                    card.priority==='red' ? 'red' :
-                    card.priority==='blue' ? 'blue' : 'grey'}`
+                    `${card.priority==='white' ? '#fff' : 
+                    card.priority==='red' ? '#e0474c' :
+                    card.priority==='blue' ? '#a0d2eb' : '#d0bdf4'}`
                    }}>
    
                {card.content}
            {show_btn && 
                <button className='dropdown_btn' onClick={toggle_dropdown_menu} >
-                   edit
+                   &#9998;
                </button>}
    
            {is_open && (
@@ -59,7 +58,7 @@ function Card({card , onSort , index , listIndex}) {
                    <li value='red' onClick={() => toggle_tag('red')} key='high'>High</li>
                    <li value='white' onClick={() => toggle_tag('white')} key='normal'>Normal</li>
                    <li value='blue' onClick={() => toggle_tag('blue')} key='low'>Low</li>
-                   <li value='grey' onClick={() => toggle_tag('grey')} key='no=priority'>No Priority</li>
+                   <li value='grey' onClick={() => toggle_tag('grey')} key='no-priority'>No Priority</li>
                </ul>
          )}
    

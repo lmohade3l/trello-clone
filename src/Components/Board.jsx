@@ -39,10 +39,36 @@ const data = [
 
 function Board() {
   const [lists , set_lists] = useState(data);
+  const [add_list , set_add_list] = useState(false);
+  const [name , set_name] = useState('');
+
+  function handle_add_list(e) {
+    e.preventDefault();
+
+    set_add_list(false);
+    if(!name) return;
+
+    const new_list = {
+      id: `${Date.now()}`,
+      title: name,
+      cards: [],
+    }
+    console.log('new list id',new_list.id);
+    let new_lists = [...lists];
+    new_lists.push(new_list);
+    set_lists(new_lists);
+
+    set_name('');
+
+  }
+
+  function handle_add_card(lists) {
+    set_lists(lists);
+  }
+
   
   function priority_sort(new_card , listIndex) {
     //update the list with the card's new priority:
-
     const updated_cards = lists[listIndex].cards.map((card) => { return new_card.id===card.id ? new_card : card})
     let updated_list = {...lists[listIndex], cards:updated_cards};
     const sortingOrder = {
@@ -128,7 +154,7 @@ function Board() {
     
   }
 
-  console.log('list to be out' , lists);
+
   return (
     <DragDropContext onDragEnd={handle_drag}>
       <Droppable droppableId='board' type='list_move'>
@@ -141,16 +167,28 @@ function Board() {
               <Draggable draggableId={list.id} index={listIndex} key={list.id}>
                 {(provided) => (
                   <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}>
-                    <List list={list} key={list.id} index={listIndex} onSort={priority_sort}/>
+                    <List list={list} key={list.id} index={listIndex} onSort={priority_sort} lists={lists} set_lists={handle_add_card}/>
                   </div>
                 )}
               </Draggable>
 
               ))}
             {provided.placeholder}
-            <div className='add_list'>
-                Add List
-            </div>
+            {!add_list && (<button className='add_list' onClick={()=> set_add_list(true)}>
+                + Add List
+            </button>)}
+
+            {add_list && (
+              <form className="add_card_form" onSubmit={handle_add_list}>
+              <label>List name:</label>
+              <input type="text" value={name} onChange={e => set_name(e.target.value)}/>
+
+              <div className='form_btns'>
+                  <button>Add List</button>
+                  <button onClick={() => set_add_list(false)}>Cancel</button>
+              </div>
+          </form>
+            )}
             </div>
             
           </div> 
