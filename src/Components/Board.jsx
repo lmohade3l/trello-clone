@@ -161,7 +161,7 @@ function Board() {
 
         {(provided) => (
           <div className='container'>
-            <div {...provided.droppableProps} ref={provided.innerRef} className='Board'>
+            <div {...provided.droppableProps} ref={provided.innerRef} className='board'>
               {lists.map((list , listIndex) => (
                   
               <Draggable draggableId={list.id} index={listIndex} key={list.id}>
